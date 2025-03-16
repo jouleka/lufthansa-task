@@ -3,6 +3,7 @@ package com.demo.travelexpensemanager.controller;
 import com.demo.travelexpensemanager.dto.request.RefundStatusRequest;
 import com.demo.travelexpensemanager.dto.response.TripResponse;
 import com.demo.travelexpensemanager.model.User;
+import com.demo.travelexpensemanager.model.enums.RefundStatusType;
 import com.demo.travelexpensemanager.repository.UserRepository;
 import com.demo.travelexpensemanager.security.services.UserDetailsImpl;
 import com.demo.travelexpensemanager.service.FinanceService;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +43,15 @@ public class FinanceController {
 
     @GetMapping("/trips/{tripId}")
     @PreAuthorize("hasRole('FINANCE')")
-    public ResponseEntity<TripResponse> getTripById(@PathVariable Long tripId) {
+    public ResponseEntity<?> getTripById(@PathVariable Long tripId) {
         User currentUser = getCurrentUser();
-        TripResponse response = financeService.getTripById(tripId, currentUser);
+        TripResponse tripResponse = financeService.getTripById(tripId, currentUser);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("trip", tripResponse);
+        response.put("refundStatus", tripResponse.getRefundStatus());
+        response.put("notes", Collections.emptyList());
+        
         return ResponseEntity.ok(response);
     }
 
@@ -52,6 +60,44 @@ public class FinanceController {
     public ResponseEntity<TripResponse> updateRefundStatus(@PathVariable Long tripId, @Valid @RequestBody RefundStatusRequest request) {
         User currentUser = getCurrentUser();
         TripResponse response = financeService.updateRefundStatus(tripId, request, currentUser);
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/trips/{tripId}/in-process")
+    @PreAuthorize("hasRole('FINANCE')")
+    public ResponseEntity<?> markAsInProcess(@PathVariable Long tripId, @RequestBody Map<String, String> request) {
+        User currentUser = getCurrentUser();
+        
+        RefundStatusRequest statusRequest = new RefundStatusRequest();
+        statusRequest.setStatus(RefundStatusType.IN_PROCESS);
+        
+        TripResponse updatedTrip = financeService.updateRefundStatus(tripId, statusRequest, currentUser);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("tripId", tripId);
+        response.put("status", RefundStatusType.IN_PROCESS);
+        response.put("updatedAt", updatedTrip.getRefundStatus().getUpdatedAt());
+        response.put("message", "Trip marked as in process");
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/trips/{tripId}/refunded")
+    @PreAuthorize("hasRole('FINANCE')")
+    public ResponseEntity<?> markAsRefunded(@PathVariable Long tripId, @RequestBody Map<String, String> request) {
+        User currentUser = getCurrentUser();
+        
+        RefundStatusRequest statusRequest = new RefundStatusRequest();
+        statusRequest.setStatus(RefundStatusType.REFUNDED);
+        
+        TripResponse updatedTrip = financeService.updateRefundStatus(tripId, statusRequest, currentUser);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("tripId", tripId);
+        response.put("status", RefundStatusType.REFUNDED);
+        response.put("updatedAt", updatedTrip.getRefundStatus().getUpdatedAt());
+        response.put("message", "Trip marked as refunded");
+        
         return ResponseEntity.ok(response);
     }
 

@@ -14,20 +14,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { FinanceService, ReportData } from '../services/finance.service';
+import { FinanceService } from '../services/finance.service';
 import { Trip } from '../../trips/models/trip.model';
-
-interface ExpenseTypeSummary {
-  count: number;
-  amount: number;
-}
-
-interface ReportSummary {
-  totalTrips: number;
-  totalExpenses: number;
-  averagePerTrip: number;
-  byExpenseType: Record<string, ExpenseTypeSummary>;
-}
+import { ExpenseTypeSummary, ReportSummary, ReportData } from '../models/report.model';
 
 @Component({
   selector: 'app-reports',
@@ -155,8 +144,8 @@ export class ReportsComponent implements OnInit {
         case 'endDate': return this.compare(new Date(a.endDate).getTime(), new Date(b.endDate).getTime(), isAsc);
         case 'status': return this.compare(a.status, b.status, isAsc);
         case 'refundStatus': return this.compare(
-          (a as Trip & { refundStatus?: string }).refundStatus || '',
-          (b as Trip & { refundStatus?: string }).refundStatus || '',
+          a.refundStatus?.status || '',
+          b.refundStatus?.status || '',
           isAsc
         );
         case 'totalExpenses': return this.compare(a.totalExpenses || 0, b.totalExpenses || 0, isAsc);
@@ -196,10 +185,14 @@ export class ReportsComponent implements OnInit {
 
     const totalExpenses = Object.values(expenseTypes).reduce((sum, type) => sum + type.count, 0);
 
+    // Calculate the total amount from all trips' totalExpenses
+    const totalAmount = trips.reduce((sum, trip) => sum + (trip.totalExpenses || 0), 0);
+
     this.reportSummary = {
       totalTrips: trips.length,
       totalExpenses,
-      averagePerTrip: trips.length > 0 ? totalExpenses / trips.length : 0,
+      totalAmount,
+      averagePerTrip: trips.length > 0 ? totalAmount / trips.length : 0,
       byExpenseType: expenseTypes
     };
   }

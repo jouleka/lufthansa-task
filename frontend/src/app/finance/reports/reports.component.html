@@ -56,7 +56,7 @@
             </div>
             <div class="summary-item">
               <div class="summary-label">Total Amount</div>
-              <div class="summary-value">{{ formatCurrency(reportSummary.totalExpenses) }}</div>
+              <div class="summary-value">{{ formatCurrency(reportSummary.totalAmount) }}</div>
             </div>
             <div class="summary-item">
               <div class="summary-label">Average per Trip</div>
@@ -124,7 +124,7 @@
             <!-- Refund Status Column -->
             <ng-container matColumnDef="refundStatus">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Refund Status </th>
-              <td mat-cell *matCellDef="let trip"> {{trip.refundStatus || 'N/A'}} </td>
+              <td mat-cell *matCellDef="let trip"> {{trip.refundStatus?.status || 'N/A'}} </td>
             </ng-container>
 
             <!-- Total Amount Column -->

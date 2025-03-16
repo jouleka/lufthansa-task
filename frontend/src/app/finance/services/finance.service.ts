@@ -3,12 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Trip } from '../../trips/models/trip.model';
 import { RefundRequest, RefundUpdate } from '../models/refund.model';
-
-export interface ReportData {
-  trips: Trip[];
-  startDate: string;
-  endDate: string;
-}
+import { ReportData } from '../models/report.model';
 
 const API_URL = 'http://localhost:8080/api';
 

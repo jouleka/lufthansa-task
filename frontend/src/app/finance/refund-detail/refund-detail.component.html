@@ -43,6 +43,10 @@
             <span class="label">Status:</span>
             <span class="value">{{ refundRequest.trip.status }}</span>
           </div>
+          <div class="info-row">
+            <span class="label">Refund Status:</span>
+            <span class="value">{{ refundRequest.refundStatus.status || 'PENDING' }}</span>
+          </div>
           <div *ngIf="refundRequest.refundStatus.financeUser?.username" class="info-row">
             <span class="label">Finance Officer:</span>
             <span class="value">{{ refundRequest.refundStatus.financeUser?.username }}</span>
@@ -80,24 +84,6 @@
             <tr mat-header-row *matHeaderRowDef="expenseColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: expenseColumns;"></tr>
           </table>
-        </div>
-      </mat-tab>
-
-      <mat-tab label="Notes">
-        <div class="notes-container">
-          <div *ngIf="refundRequest.notes && refundRequest.notes.length > 0" class="notes-list">
-            <div *ngFor="let note of refundRequest.notes" class="note-item">
-              <div class="note-header">
-                <span class="note-author">{{ note.createdBy || 'Unknown' }}</span>
-                <span class="note-date">{{ note.createdAt ? formatDateTime(note.createdAt) : '' }}</span>
-              </div>
-              <div class="note-content">{{ note.note }}</div>
-            </div>
-          </div>
-
-          <div *ngIf="!refundRequest.notes || refundRequest.notes.length === 0" class="empty-notes">
-            <p>No notes have been added to this trip yet.</p>
-          </div>
         </div>
       </mat-tab>
     </mat-tab-group>

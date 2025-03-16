@@ -7,6 +7,7 @@ import com.demo.travelexpensemanager.exception.UnauthorizedException;
 import com.demo.travelexpensemanager.model.*;
 import com.demo.travelexpensemanager.model.enums.TripStatus;
 import com.demo.travelexpensemanager.repository.TripRepository;
+import com.demo.travelexpensemanager.repository.RefundStatusRepository;
 import com.demo.travelexpensemanager.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,9 @@ public class TripServiceImpl implements TripService {
 
     @Autowired
     private TripRepository tripRepository;
+
+    @Autowired
+    private RefundStatusRepository refundStatusRepository;
 
     @Override
     @Transactional
@@ -177,6 +182,55 @@ public class TripServiceImpl implements TripService {
         }
         response.setExpenses(expenseResponses);
         response.setTotalExpenses(trip.calculateTotalExpenses());
+
+        if (trip.getApprovalNotes() != null && !trip.getApprovalNotes().isEmpty()) {
+            List<ApprovalNoteResponse> approvalNoteResponses = trip.getApprovalNotes().stream()
+                    .map(note -> {
+                        ApprovalNoteResponse noteResponse = new ApprovalNoteResponse();
+                        noteResponse.setId(note.getId());
+                        noteResponse.setNote(note.getNote());
+                        noteResponse.setCreatedAt(note.getCreatedAt());
+                        User approver = note.getApprover();
+                        List<String> approverRoles = approver.getRoles().stream()
+                                .map(role -> role.getName().name())
+                                .collect(Collectors.toList());
+                        noteResponse.setApprover(new UserResponse(
+                                approver.getId(), 
+                                approver.getUsername(), 
+                                approver.getEmail(), 
+                                approverRoles
+                        ));
+                        return noteResponse;
+                    })
+                    .collect(Collectors.toList());
+            response.setApprovalNotes(approvalNoteResponses);
+        }
+
+        if (trip.getStatus() == TripStatus.APPROVED) {
+            Optional<RefundStatus> refundStatusOpt = refundStatusRepository.findByTrip(trip);
+            if (refundStatusOpt.isPresent()) {
+                RefundStatus refundStatus = refundStatusOpt.get();
+                RefundStatusResponse refundStatusResponse = new RefundStatusResponse();
+                refundStatusResponse.setId(refundStatus.getId());
+                refundStatusResponse.setStatus(refundStatus.getStatus());
+                refundStatusResponse.setUpdatedAt(refundStatus.getUpdatedAt());
+                
+                User financeUser = refundStatus.getFinanceUser();
+                if (financeUser != null) {
+                    List<String> financeUserRoles = financeUser.getRoles().stream()
+                            .map(role -> role.getName().name())
+                            .collect(Collectors.toList());
+                    refundStatusResponse.setFinanceUser(new UserResponse(
+                            financeUser.getId(), 
+                            financeUser.getUsername(), 
+                            financeUser.getEmail(), 
+                            financeUserRoles
+                    ));
+                }
+                
+                response.setRefundStatus(refundStatusResponse);
+            }
+        }
 
         return response;
     }

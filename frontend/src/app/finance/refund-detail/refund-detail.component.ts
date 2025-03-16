@@ -148,7 +148,8 @@ export class RefundDetailComponent implements OnInit {
     return new Date(date).toLocaleDateString();
   }
 
-  formatDateTime(date: string): string {
+  formatDateTime(date?: string): string {
+    if (!date) return '';
     return new Date(date).toLocaleString();
   }
 
@@ -174,20 +175,31 @@ export class RefundDetailComponent implements OnInit {
     }
   }
 
-  getExpenseDetails(expense: { type: ExpenseType; details: Record<string, string> }): string {
-    const details = expense.details;
+  getExpenseDetails(expense: any): string {
+    try {
+      if (!expense.details && expense.type === ExpenseType.TAXI) {
+        if (expense.fromLocation && expense.toLocation) {
+          return `${expense.fromLocation} to ${expense.toLocation}`;
+        }
+      }
 
-    switch (expense.type) {
-      case ExpenseType.CAR_RENTAL:
-        return `${details['carName']} - ${details['pickupLocation']} to ${details['dropoffLocation']}`;
-      case ExpenseType.HOTEL:
-        return `${details['hotelName']} - ${details['location']}`;
-      case ExpenseType.FLIGHT:
-        return `${details['airline']} - ${details['from']} to ${details['to']}`;
-      case ExpenseType.TAXI:
-        return `${details['from']} to ${details['to']}`;
-      default:
-        return '';
+      const details = expense.details || {};
+
+      switch (expense.type) {
+        case ExpenseType.CAR_RENTAL:
+          return `${details['carName'] || ''} - ${details['pickupLocation'] || ''} to ${details['dropoffLocation'] || ''}`;
+        case ExpenseType.HOTEL:
+          return `${details['hotelName'] || ''} - ${details['location'] || ''}`;
+        case ExpenseType.FLIGHT:
+          return `${details['airline'] || ''} - ${details['from'] || ''} to ${details['to'] || ''}`;
+        case ExpenseType.TAXI:
+          return `${details['from'] || ''} to ${details['to'] || ''}`;
+        default:
+          return '';
+      }
+    } catch (error) {
+      console.error('Error processing expense details', error);
+      return '';
     }
   }
 
