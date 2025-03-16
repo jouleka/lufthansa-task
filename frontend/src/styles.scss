@@ -1,0 +1,33 @@
+// Angular Material pre-built theme
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Basic styles for better visibility
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+}
+
+// Ensure text contrast
+.mat-card, .mat-card-header, .mat-card-title, .mat-card-content,
+.mat-table, .mat-form-field, .mat-label, .mat-button-wrapper,
+h1, h2, h3, p, span, div {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+// Card backgrounds
+.mat-card {
+  background-color: white;
+}
+
+// Fix for the dark-themed component
+.create-trip-container, .trip-details-container, .refund-detail-container {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 20px;
+}
+
+// Form inputs
+input, textarea, select {
+  color: rgba(0, 0, 0, 0.87);
+}

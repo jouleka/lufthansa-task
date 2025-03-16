@@ -1,0 +1,51 @@
+.trip-form-container {
+  padding: 20px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.form-row {
+  margin-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.date-row {
+  display: flex;
+  gap: 16px;
+}
+
+.date-row mat-form-field {
+  flex: 1;
+}
+
+.date-error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: -16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .date-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+mat-card-actions button {
+  margin-left: 8px;
+}

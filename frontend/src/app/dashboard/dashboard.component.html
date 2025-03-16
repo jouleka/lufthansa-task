@@ -1,0 +1,56 @@
+<div class="dashboard-container">
+  <mat-card class="dashboard-card">
+    <mat-card-header>
+      <mat-card-title>Dashboard</mat-card-title>
+      <mat-card-subtitle>Welcome to Travel Expense Manager</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="currentUser">
+        <p>Welcome, {{ currentUser.username }}!</p>
+        <p>Your roles: {{ currentUser.roles.join(', ') }}</p>
+
+        <div class="role-actions">
+          <ng-container *ngIf="hasRole(userRole)">
+            <h3>Travel Management</h3>
+            <div class="action-buttons">
+              <button mat-raised-button color="primary" routerLink="/trips">
+                <mat-icon>flight</mat-icon> Manage Trips
+              </button>
+              <button mat-raised-button color="primary" routerLink="/trips/new">
+                <mat-icon>add</mat-icon> Create New Trip
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="hasRole(approverRole)">
+            <h3>Approval Management</h3>
+            <div class="action-buttons">
+              <button mat-raised-button color="accent" routerLink="/approvals">
+                <mat-icon>fact_check</mat-icon> Pending Approvals
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="hasRole(financeRole)">
+            <h3>Finance Management</h3>
+            <div class="action-buttons">
+              <button mat-raised-button color="warn" routerLink="/finance">
+                <mat-icon>payments</mat-icon> Manage Refunds
+              </button>
+              <button mat-raised-button color="warn" routerLink="/finance/reports">
+                <mat-icon>assessment</mat-icon> Financial Reports
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="warn" (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon> Logout
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

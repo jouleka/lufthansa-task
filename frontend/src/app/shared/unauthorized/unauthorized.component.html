@@ -1,0 +1,20 @@
+<div class="unauthorized-container">
+  <mat-card class="unauthorized-card">
+    <mat-card-header>
+      <mat-icon class="warning-icon">warning</mat-icon>
+      <mat-card-title>Access Denied</mat-card-title>
+      <mat-card-subtitle>You don't have permission to access this page</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>You do not have the required role to access this section.</p>
+      <p>Please contact your administrator if you believe this is an error.</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon> Return to Dashboard
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

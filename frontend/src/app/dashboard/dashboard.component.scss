@@ -1,0 +1,49 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.dashboard-card {
+  width: 800px;
+  max-width: 90%;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.role-actions {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.role-actions h3 {
+  margin-top: 16px;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  display: flex;
+  align-items: center;
+}
+
+.action-buttons mat-icon {
+  margin-right: 8px;
+}

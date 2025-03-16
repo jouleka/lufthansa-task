@@ -1,0 +1,94 @@
+.trip-list-container {
+  padding: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell {
+  font-weight: bold;
+}
+
+a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.status-draft {
+  background-color: #e0e0e0;
+  color: #616161;
+}
+
+.status-pending {
+  background-color: #fff9c4;
+  color: #fbc02d;
+}
+
+.status-approved {
+  background-color: #c8e6c9;
+  color: #4caf50;
+}
+
+.status-rejected {
+  background-color: #ffcdd2;
+  color: #f44336;
+}
+
+.status-refunded {
+  background-color: #bbdefb;
+  color: #2196f3;
+}
+
+.status-in-process {
+  background-color: #d1c4e9;
+  color: #673ab7;
+}
+
+button[mat-icon-button] {
+  &:not([disabled]) {
+    mat-icon {
+      color: #3f51b5;
+      opacity: 1;
+    }
+  }
+
+  &[disabled] {
+    mat-icon {
+      color: var(--mdc-icon-button-disabled-icon-color, rgba(255, 255, 255, 0.3)) !important;
+      opacity: 0.38;
+    }
+    cursor: not-allowed;
+  }
+}
