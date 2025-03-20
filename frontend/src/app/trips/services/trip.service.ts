@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Trip, Expense, ExpenseType } from '../models/trip.model';
+import { Trip, Expense, ExpenseType, CarRental, Hotel, Flight, Taxi } from '../models/trip.model';
 
 const API_URL = 'http://localhost:8080/api/trips';
 const EXPENSES_API_URL = 'http://localhost:8080/api/expenses';
@@ -71,10 +71,10 @@ export class TripService {
     }
   }
 
-  addCarRental(tripId: number, data: any): Observable<Expense> {
+  addCarRental(tripId: number, data: CarRental): Observable<Expense> {
     console.log('Adding car rental:', data);
     return this.http.post<Expense>(`${EXPENSES_API_URL}/trips/${tripId}/car-rentals`, {
-      totalPrice: data.totalPrice,
+      totalPrice: data.totalPrice ?? 0,
       carName: data.carName,
       pickupLocation: data.pickupLocation,
       pickupTime: data.pickupDateTime,
@@ -83,10 +83,10 @@ export class TripService {
     });
   }
 
-  addHotel(tripId: number, data: any): Observable<Expense> {
+  addHotel(tripId: number, data: Hotel): Observable<Expense> {
     console.log('Adding hotel:', data);
     return this.http.post<Expense>(`${EXPENSES_API_URL}/trips/${tripId}/hotels`, {
-      totalPrice: data.totalPrice,
+      totalPrice: data.totalPrice ?? 0,
       hotelName: data.hotelName,
       location: data.location,
       checkInDate: data.checkInDate,
@@ -94,10 +94,10 @@ export class TripService {
     });
   }
 
-  addFlight(tripId: number, data: any): Observable<Expense> {
+  addFlight(tripId: number, data: Flight): Observable<Expense> {
     console.log('Adding flight:', data);
     return this.http.post<Expense>(`${EXPENSES_API_URL}/trips/${tripId}/flights`, {
-      totalPrice: data.totalPrice,
+      totalPrice: data.totalPrice ?? 0,
       airline: data.airline,
       departureLocation: data.from,
       arrivalLocation: data.to,
@@ -106,10 +106,10 @@ export class TripService {
     });
   }
 
-  addTaxi(tripId: number, data: any): Observable<Expense> {
+  addTaxi(tripId: number, data: Taxi): Observable<Expense> {
     console.log('Adding taxi with data:', data);
     return this.http.post<Expense>(`${EXPENSES_API_URL}/trips/${tripId}/taxis`, {
-      totalPrice: data.totalPrice,
+      totalPrice: data.totalPrice ?? 0,
       fromLocation: data.from,
       toLocation: data.to,
       time: data.dateTime

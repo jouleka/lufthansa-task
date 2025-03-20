@@ -14,7 +14,16 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 import { TripService } from '../services/trip.service';
-import { Trip, TripStatus, Expense, ExpenseType, CarRental, Hotel, Flight, Taxi } from '../models/trip.model';
+import {
+  Trip,
+  TripStatus,
+  Expense,
+  ExpenseType,
+  FlightExpense,
+  CarRentalExpense,
+  HotelExpense,
+  TaxiExpense
+} from '../models/trip.model';
 
 @Component({
   selector: 'app-trip-detail',
@@ -173,36 +182,40 @@ export class TripDetailComponent implements OnInit {
   formatExpenseDetails(expense: Expense): string {
     switch (expense.type) {
       case ExpenseType.CAR_RENTAL: {
-        return `${expense.carName} - From ${expense.pickupLocation} to ${expense.dropLocation}`;
+        const carRental = expense as CarRentalExpense;
+        return `${carRental.carName} - From ${carRental.pickupLocation} to ${carRental.dropLocation}`;
       }
       case ExpenseType.HOTEL: {
-        return `${expense.hotelName} in ${expense.location}`;
+        const hotel = expense as HotelExpense;
+        return `${hotel.hotelName} in ${hotel.location}`;
       }
       case ExpenseType.FLIGHT: {
-        return `${expense.airline} - From ${expense.departureLocation} to ${expense.arrivalLocation}`;
+        const flight = expense as FlightExpense;
+        return `${flight.airline} - From ${flight.departureLocation} to ${flight.arrivalLocation}`;
       }
       case ExpenseType.TAXI: {
-        return `From ${expense['fromLocation']} to ${expense['toLocation']}`;
+        const taxi = expense as TaxiExpense;
+        return `From ${taxi.from} to ${taxi.to}`;
       }
       default:
         return '';
     }
   }
 
-  // Helper methods for expense details access
-  getCarRentalDetails(expense: Expense): any {
-    return expense;
+  // Helper methods for expense details access with proper typing
+  getCarRentalDetails(expense: Expense): CarRentalExpense | null {
+    return expense.type === ExpenseType.CAR_RENTAL ? (expense as CarRentalExpense) : null;
   }
 
-  getHotelDetails(expense: Expense): any {
-    return expense;
+  getHotelDetails(expense: Expense): HotelExpense | null {
+    return expense.type === ExpenseType.HOTEL ? (expense as HotelExpense) : null;
   }
 
-  getFlightDetails(expense: Expense): any {
-    return expense;
+  getFlightDetails(expense: Expense): FlightExpense | null {
+    return expense.type === ExpenseType.FLIGHT ? (expense as FlightExpense) : null;
   }
 
-  getTaxiDetails(expense: Expense): any {
-    return expense;
+  getTaxiDetails(expense: Expense): TaxiExpense | null {
+    return expense.type === ExpenseType.TAXI ? (expense as TaxiExpense) : null;
   }
 }
